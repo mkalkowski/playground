@@ -1,10 +1,6 @@
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Scanner;
 
-/**
- * Created by michal on 08.01.17.
- */
 public class BiggerIsGreater {
 
     public static void main(String[] args) {
@@ -20,12 +16,47 @@ public class BiggerIsGreater {
     private static void handleCase(Scanner scanner) {
 
         Integer[] ints = getInts(scanner);
+        Integer[] clone = Arrays.copyOf(ints, ints.length);
 
         increment(ints);
 
-        print(ints);
+        print(ints, clone);
 
     }
+
+
+    private static void increment(Integer[] ints) {
+
+        if (ints.length == 1) return ;
+        int pivot = -1;
+        for (int i=ints.length-1; i>=1; i--) {
+
+            if (ints[i] > ints[i-1]) {
+                pivot = i-1;
+                break;
+            }
+        }
+
+        if (pivot == -1) return;
+
+//        System.out.println("pivot = " + pivot + " - > " + new String(new byte[] { ints[pivot].byteValue()}));
+
+        int justAbovePivot = -1;
+        for (int i=ints.length-1; i>pivot; i--) {
+            if (ints[i] > ints[pivot]) {
+                if (justAbovePivot == -1 || ints[justAbovePivot] > ints[i]) {
+                    justAbovePivot = i;
+                }
+            }
+        }
+//        System.out.println("justAbove = " + justAbovePivot + " - > " + new String(new byte[] { ints[justAbovePivot].byteValue()}));
+
+        swap(ints, justAbovePivot, pivot);
+
+        Arrays.sort(ints, pivot + 1, ints.length);
+
+    }
+
 
     private static Integer[] getInts(Scanner scanner) {
         final String word = scanner.next();
@@ -40,34 +71,13 @@ public class BiggerIsGreater {
         return ints;
     }
 
-    private static void increment(Integer[] ints) {
-
-        if (ints.length == 1) return ;
-
-        Integer max = null;
-        for (int i=1; i<ints.length; i++) {
-            if (ints[i] > ints[0]) {
-                if (max == null || ints[i] > ints[max]) {
-                    max = i;
-                }
-            }
-        }
-
-        if (max == null)
-            return;
-        swap(ints, 0, max);
-
-        Arrays.sort(ints, 1, ints.length-1);
-
-    }
-
     private static void swap(Integer[] ints, int i, int i1) {
         int tmp = ints[i];
         ints[i] = ints[i1];
         ints[i1] = tmp;
     }
 
-    private static void print(Integer[] ints) {
+    private static void print(Integer[] ints, Integer[] clone) {
 
         byte[] bytes = new byte[ints.length];
         for (int i=0; i<bytes.length; i++) {
@@ -75,6 +85,6 @@ public class BiggerIsGreater {
         }
 
         final String result = new String(bytes);
-        System.out.println(result);
+        System.out.println(Arrays.equals(clone, ints) ? "no answer" : result);
     }
 }
