@@ -34,7 +34,7 @@ public class IsThisBST {
 
         List<Node> path = new LinkedList<>();
 
-        path = inorder(root);
+        inorder(root, path);
 
         System.out.println(path);
         for (int i = 1; i < path.size(); i++) {
@@ -43,27 +43,12 @@ public class IsThisBST {
         return true;
     }
 
-    private List<Node> inorder(Node root) {
+    private List<Node> inorder(Node root, List<Node> path) {
 
-        LinkedList<Node> stack = new LinkedList<>();
-        LinkedList<Node> path = new LinkedList<>();
-        Node current = root;
+        if (root.left != null) inorder(root.left, path);
+        path.add(root);
+        if ( root.right != null) inorder(root.right, path);
 
-        do {
-            stack.add(current);
-
-            if (current.left != null) {
-                current = current.left;
-            } else {
-                path.add(current);
-                if (current.right != null) {
-                    current = current.right;
-                } else {
-                    current = stack.pop();
-                }
-            }
-
-        }while (!stack.isEmpty());
         return path;
     }
 
