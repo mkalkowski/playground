@@ -1,9 +1,6 @@
 package core;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -13,7 +10,7 @@ public class NashornDynamicQuery {
 
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         final String selector = "pojo.a == \"abc\" && pojo.b == 1";
-        engine.eval(String.format(Locale.ENGLISH,
+        ((Compilable)engine).compile(String.format(Locale.ENGLISH,
                 "var filter = function(pojo) {\n" +
                 "    return %s;" +
                 "};", selector));
